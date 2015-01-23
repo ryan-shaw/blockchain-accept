@@ -3,6 +3,7 @@ A Node.js module to accept Bitcoin through the blockchain.info API.
 - Lite and fast, uses express.
 - Uses blockchain.info's 'ad hoc' sending, store to cold storage.
 - Uses mongo to store transactions
+
 ## Get started
 Install via nom:
 ```javascript
