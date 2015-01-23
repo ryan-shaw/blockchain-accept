@@ -15,12 +15,15 @@ var tx = mongoose.model('blockchain-tx', {
 var defaultSettings = {
 	port: 8383,
 	path: '/confirm',
-	addr: '12X2Yxm55LW3BrtrhUPWH7qvyE8k32M3VD',
+	addr: '1EPpuUuuW9i2kPMHXLFmYUZZZs1ob9Q69S', // Required otherwise you are sending to me, you can override here >:D
 	createUrl: 'https://blockchain.info/api/receive?method=create&address=%s&callback=%s',
-	callback: 'http://home.min.vc'
+	callback: '' // Required in settings
 };
 var callback;
 module.exports = function(settings, g_callback){
+	if(typeof settings.callback === 'undefined'){
+		return new Error('callback not set'); 
+	}
 	callback = g_callback;
 	return {
 		app: start(settings),
