@@ -17,8 +17,13 @@ var settings = {
 	addr: 'YOUR RECEIVE ADDRESS', (REQUIRED)
 	confirmations: 4 (default: 6)
 }
-blockchain = blockchain(settings, function(returnObj){
+blockchain = blockchain(settings, function(tx){
 	// This callback is called when a transaction has been confirmed and returns object data given to the receive function.
+	// tx has several properties:
+	// return_data: the data passed through receive function
+	// confirmed: how many confirmations we have
+	// input_address: the receiving ad hoc address
+	// expected_btc: expected btc
 });
 ```
 
