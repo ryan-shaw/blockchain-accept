@@ -1,6 +1,6 @@
 {
   "name": "blockchain-accept",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Accept BTC through the blockchain.info API",
   "main": "index.js",
   "repository": {
