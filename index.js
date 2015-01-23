@@ -64,7 +64,7 @@ function start(settings){
 	app.get(defaultSettings.path + '/:tx_id', function(req, res){
 		var tx_id = req.params.tx_id || '';
 
-		var value = req.query.value || 0;
+		var value = req.query.value/100000000 || 0;
 
 		var input_address = req.query.input_address || '';
 
