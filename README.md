@@ -11,7 +11,7 @@ npm install blockchain-accept
 ```
 
 ```javascript
-var blockchain = require('../index');
+var blockchain = require('blockchain-accept');
 var settings = {
 	callbackUrl: 'YOUR APP HOST (DO NOT INCLUDE PATHS)', (REQUIRED)
 	addr: 'YOUR RECEIVE ADDRESS', (REQUIRED)
