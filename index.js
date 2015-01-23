@@ -17,7 +17,8 @@ var defaultSettings = {
 	path: '/confirm',
 	addr: '1EPpuUuuW9i2kPMHXLFmYUZZZs1ob9Q69S', // Required otherwise you are sending to me, you can override here >:D
 	createUrl: 'https://blockchain.info/api/receive?method=create&address=%s&callback=%s',
-	callback: '' // Required in settings
+	callback: '', // Required in settings
+	confirmations: 6
 };
 var callback;
 module.exports = function(settings, g_callback){
@@ -73,7 +74,7 @@ function start(settings){
 				return res.send('err');
 
 			tx.confirmed = confirmations;
-			if(confirmations < 6){
+			if(confirmations < defaultSettings.confirmations){
 				res.send('not enough confirmations');
 			}else{
 				callback(tx.return_data);
