@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Accept BTC through the blockchain.info API",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanshawty/blockchain-accept.git"
+  },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec"
   },

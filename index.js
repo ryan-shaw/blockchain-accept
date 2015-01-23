@@ -10,7 +10,7 @@ var tx = mongoose.model('blockchain-tx', {
 	return_data: Object,
 	input_address: String,
 	confirmed: Number
-})
+});
 
 var defaultSettings = {
 	port: 8383,
@@ -25,7 +25,7 @@ module.exports = function(settings, g_callback){
 	return {
 		app: start(settings),
 		receive: function(btc, objData, callback){
-			var url = util.format(defaultSettings.createUrl, defaultSettings.addr, defaultSettings.callback + ':' + defaultSettings.port + defaultSettings.path)
+			var url = util.format(defaultSettings.createUrl, defaultSettings.addr, defaultSettings.callback + ':' + defaultSettings.port + defaultSettings.path);
 			https.get(url, function(result){
 				var data = '';
 				result.on('data', function(chunk){
@@ -47,23 +47,28 @@ module.exports = function(settings, g_callback){
 				});
 			});
 		}
-	}
-}
+	};
+};
 
 function start(settings){
 	defaultSettings = extend(defaultSettings, settings);
 	app.get(defaultSettings.path, function(req, res){
-		console.log(req.query);
 		var value = req.query.value || 0;
+
 		var input_address = req.query.input_address || '';
+
 		var destination_address = req.query.destination_address || '';
 		if(destination_address !== defaultSettings.addr) 
 			return res.send('destination does not match');
+
 		var confirmations = req.query.confirmations || 0;
+
 		var return_data = {};
+
 		tx.findOne({input_address: input_address, expected_btc: value}, function(err, tx){
 			if(err || !tx) 
 				return res.send('err');
+
 			tx.confirmed = confirmations;
 			if(confirmations < 6){
 				res.send('not enough confirmations');
@@ -71,11 +76,14 @@ function start(settings){
 				callback(tx.return_data);
 				res.send('*ok*');
 			}
+
 			tx.save();
 		});
 	});
+
 	app.listen(defaultSettings.port, function(){
 		console.log('Listening on ', defaultSettings.port);
 	});
+	
 	return app;
 }
