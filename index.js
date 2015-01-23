@@ -82,6 +82,7 @@ function start(settings){
 
 			tx.confirmed = confirmations;
 			if(confirmations < defaultSettings.confirmations){
+				console.log('[BCI-A] TX not enough confirmations yet: ' + tx.tx_id + ', confirmation count: ' + confirmations);
 				res.send('not enough confirmations');
 			}else{
 				if(!tx.notified){
