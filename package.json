@@ -1,6 +1,6 @@
 {
   "name": "blockchain-accept",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Accept BTC through the blockchain.info API",
   "main": "index.js",
   "repository": {
@@ -15,7 +15,8 @@
   "dependencies": {
     "express": "^4.11.1",
     "extend": "^2.0.0",
-    "mongoose": "^3.8.21"
+    "mongoose": "^3.8.21",
+    "node-uuid": "^1.4.2"
   },
   "devDependencies": {
     "chai": "^1.10.0",
