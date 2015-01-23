@@ -1,5 +1,5 @@
 {
-  "name": "blockchain",
+  "name": "blockchain-accept",
   "version": "0.0.1",
   "description": "Accept BTC through the blockchain.info API",
   "main": "index.js",
