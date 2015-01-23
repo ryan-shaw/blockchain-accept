@@ -5,6 +5,8 @@ A Node.js module to accept Bitcoin through the blockchain.info API.
 - Uses mongo to store transactions
 
 ## Get started
+Ensure you have a mongodb connection through mongoose.
+
 Install via npm:
 ```javascript
 npm install blockchain-accept
