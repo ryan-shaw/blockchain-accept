@@ -1,8 +1,12 @@
 {
-  "name": "blockchain",
-  "version": "0.0.1",
+  "name": "blockchain-accept",
+  "version": "0.2.0",
   "description": "Accept BTC through the blockchain.info API",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanshawty/blockchain-accept.git"
+  },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
@@ -11,7 +15,8 @@
   "dependencies": {
     "express": "^4.11.1",
     "extend": "^2.0.0",
-    "mongoose": "^3.8.21"
+    "mongoose": "^3.8.21",
+    "node-uuid": "^1.4.2"
   },
   "devDependencies": {
     "chai": "^1.10.0",

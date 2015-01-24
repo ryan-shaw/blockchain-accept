@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://auth:94jefgadkgf29@niceway.to/auth');
 
 var settings = {
-
+	callback: 'http://home.min.vc'
 };
 
 blockchain = blockchain(settings, function(obj1){
