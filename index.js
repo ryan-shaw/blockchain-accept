@@ -33,7 +33,6 @@ module.exports = function(settings, g_callback){
 				});
 
 				result.on('end', function(){
-					console.log(data);
 					try{
 						var parsed = JSON.parse(data.toString());
 						var newTx = new tx({expected_btc: btc, return_data: objData, input_address: parsed.input_address, confirmations: 0});
@@ -45,6 +44,27 @@ module.exports = function(settings, g_callback){
 						callback(data.toString(), null);
 					}
 				});
+
+				result.on('error', function(err){
+					callback(err, data);
+				});
+			});
+		},
+		convert: function(currencyCode, value, callback){
+			var url = util.format('https://blockchain.info/tobtc?currency=%s&value=%s', currencyCode, value);
+			https.get(url, function(result){
+				var data = '';
+				result.on('data', function(chunk){
+					data += chunk;
+				});
+
+				result.on('end', function(){
+					callback(null, parseInt(data));
+				});
+
+				result.on('error', function(err){
+					callback(err, data);
+				})
 			});
 		}
 	}
