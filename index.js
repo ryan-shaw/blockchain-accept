@@ -4,28 +4,36 @@ var extend = require('extend');
 var mongoose = require('mongoose');
 var https = require('https');
 var util = require('util');
+var uuid = require('node-uuid');
 
 var tx = mongoose.model('blockchain-tx', {
 	expected_btc: Number,
 	return_data: Object,
 	input_address: String,
-	confirmed: Number
-})
+	confirmed: Number,
+	tx_id: String,
+	notified: {type: Boolean, default: false}
+});
 
 var defaultSettings = {
 	port: 8383,
 	path: '/confirm',
-	addr: '12X2Yxm55LW3BrtrhUPWH7qvyE8k32M3VD',
+	addr: '1EPpuUuuW9i2kPMHXLFmYUZZZs1ob9Q69S', // Required otherwise you are sending to me, you can override here >:D
 	createUrl: 'https://blockchain.info/api/receive?method=create&address=%s&callback=%s',
-	callback: 'http://home.min.vc'
+	callback: '', // Required in settings
+	confirmations: 6
 };
 var callback;
 module.exports = function(settings, g_callback){
+	if(typeof settings.callback === 'undefined'){
+		return new Error('callback not set'); 
+	}
 	callback = g_callback;
 	return {
 		app: start(settings),
 		receive: function(btc, objData, callback){
-			var url = util.format(defaultSettings.createUrl, defaultSettings.addr, defaultSettings.callback + ':' + defaultSettings.port + defaultSettings.path)
+			var tx_id = uuid.v4();
+			var url = util.format(defaultSettings.createUrl, defaultSettings.addr, defaultSettings.callback + ':' + defaultSettings.port + defaultSettings.path + '/' + tx_id);
 			https.get(url, function(result){
 				var data = '';
 				result.on('data', function(chunk){
@@ -72,30 +80,44 @@ module.exports = function(settings, g_callback){
 
 function start(settings){
 	defaultSettings = extend(defaultSettings, settings);
-	app.get(defaultSettings.path, function(req, res){
-		console.log(req.query);
-		var value = req.query.value || 0;
+	app.get(defaultSettings.path + '/:tx_id', function(req, res){
+		var tx_id = req.params.tx_id || '';
+
+		var value = req.query.value/100000000 || 0;
+
 		var input_address = req.query.input_address || '';
+
 		var destination_address = req.query.destination_address || '';
 		if(destination_address !== defaultSettings.addr) 
 			return res.send('destination does not match');
+
 		var confirmations = req.query.confirmations || 0;
+
 		var return_data = {};
-		tx.findOne({input_address: input_address, expected_btc: value}, function(err, tx){
+
+		tx.findOne({input_address: input_address, expected_btc: value, tx_id: tx_id}, function(err, tx){
 			if(err || !tx) 
-				return res.send('err');
+				return res.send('tx not found');
+
 			tx.confirmed = confirmations;
-			if(confirmations < 6){
+			if(confirmations < defaultSettings.confirmations){
+				console.log('[BCI-A] TX not enough confirmations yet: ' + tx.tx_id + ', confirmation count: ' + confirmations);
 				res.send('not enough confirmations');
 			}else{
-				callback(tx.return_data);
+				if(!tx.notified){
+					callback(tx);
+					tx.notified = true;
+				}
 				res.send('*ok*');
 			}
+
 			tx.save();
 		});
 	});
+
 	app.listen(defaultSettings.port, function(){
 		console.log('Listening on ', defaultSettings.port);
 	});
+	
 	return app;
 }
